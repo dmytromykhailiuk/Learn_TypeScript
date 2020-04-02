@@ -38,8 +38,9 @@ const card: Card = {
 interface Log {
   (name: string, surname: string):void
 }
+let logFullName: Log
 
-function logFullName(name: string, surname: string): void {
+logFullName = (name: string, surname: string): void => {
   console.log(name + ' ' + surname);  
 }  //  valid
 
