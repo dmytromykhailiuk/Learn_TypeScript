@@ -12,7 +12,7 @@ function Logg2(target: any, name: string, descriptor: PropertyDescriptor):void {
   console.log('Accessor decorator!');
   //console.log(target); // target === class constructor
   //console.log(name);
-  console.log(descriptor); // --------------------WHY UNDEFINED---?
+  console.log(descriptor); //  descriptor
 }
 
 function Logg3( // For Method
@@ -23,7 +23,7 @@ function Logg3( // For Method
   console.log('Method decorator!');
   //console.log(target);
   //console.log(name);
-  console.log(descriptor); // ----------------------WHY UNDEFINED---?
+  console.log(descriptor); //   descriptor
 }
 
 function Logg4(target: any, name: string | Symbol, position: number) { // For Method Parameter
@@ -32,6 +32,7 @@ function Logg4(target: any, name: string | Symbol, position: number) { // For Me
   //console.log(name);
   //console.log(position);
 }
+
 
 class Product5 {
   @Logg // Using before entity
