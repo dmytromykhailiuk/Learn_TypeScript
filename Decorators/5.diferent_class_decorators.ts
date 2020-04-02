@@ -8,13 +8,11 @@ function Logg(target: any, propertyName: string | Symbol) {  // For property
   //console.log(target, propertyName); // target === class constructor, "title"
 }
 
-function Logg2() { // For Accesor
-  return (target: any, name: string, descriptor: PropertyDescriptor):void => {
-    console.log('Accessor decorator!');
-    //console.log(target); // target === class constructor
-    //console.log(name);
-    console.log(descriptor); // --------------------WHY UNDEFINED---?
-  }
+function Logg2(target: any, name: string, descriptor: PropertyDescriptor):void {
+  console.log('Accessor decorator!');
+  //console.log(target); // target === class constructor
+  //console.log(name);
+  console.log(descriptor); // --------------------WHY UNDEFINED---?
 }
 
 function Logg3( // For Method
@@ -40,7 +38,7 @@ class Product5 {
   title: string;
   private _price: number;
 
-  @Logg2() // Using before entity
+  @Logg2 // Using before entity
   set price(val: number) {
     if (val > 0) {
       this._price = val;
