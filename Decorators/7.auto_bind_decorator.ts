@@ -4,8 +4,8 @@
 //------------------Binding This with the help of a decorator-------------
 
 
-function Autobind7(_: any, _2: string, descriptor: PropertyDescriptor) { // Why doesn't see descriptor????
-  const originalMethod = descriptor.value;  // TypeError: Cannot read property 'value' of undefined
+function Autobind7(_: any, _2: string, descriptor: PropertyDescriptor) { 
+  const originalMethod = descriptor.value;  
   const adjDescriptor: PropertyDescriptor = {
     configurable: true,
     enumerable: false,
