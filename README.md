@@ -67,3 +67,77 @@ if (typeof a === "string") {
 ```
 </p>
 </details>
+
+<details><summary><b>Literal Types</b></summary>
+<p>
+    
+```ts
+let sex: 'men' | 'women';
+
+
+//sex = 323; ERROR only 'men' | 'women'
+sex = 'men'
+```
+</p>
+</details>
+
+<details><summary><b>Aliases & Custom Types</b></summary>
+<p>
+    
+```ts
+type Sex = 'men' | 'women';
+
+let person: Sex;
+
+person = 'women';
+
+//----------------------
+
+type Something = string | number;
+
+let something: Something;
+
+something = '';
+
+// something = true; // - can't be
+```
+</p>
+</details>
+
+<details><summary><b>Typles</b></summary>
+<p>
+    
+```ts
+let arr:[string, number] = ['author', 2];
+
+
+//arr = ['dfdfd', 23, true]
+arr = ['dfdfd', 23]; //only
+```
+</p>
+</details>
+
+<details><summary><b>Enum</b></summary>
+<p>
+    
+```ts
+enum Role {AUTHOR = 'Author', SECOND = 2} // AUTHOR = 'Author' | SECOND = 2
+
+let role = Role[2]; // Second
+
+//console.log(role);
+
+enum SportCar {Ford, Ferrari} // Ford = 0 | Ferrari = 1
+
+let sportCar = SportCar.Ford;
+
+// console.log(sportCar);
+
+enum Car {Mazda = 34, Lada} // Mazda = 34 | Lada = 35
+
+let car = Car.Lada;
+
+console.log(car);
+```
+</p>
+</details>
