@@ -858,3 +858,290 @@ const names2: Readonly<string[]> = ['Max', 'Anna'];
 ```
 </p>
 </details>
+
+<hr/>
+
+## Decorators
+
+<details><summary><b>First Class Decorator</b></summary>
+<p>
+    
+```ts
+//  Decorator is a simple function that always accept the class constructor.
+//  Decorators are using only for classes, classes methods, and properties
+
+function Logger1(constructor: Function) { // Accepting the class constructor
+  console.log('Logging...');                      // first log
+  console.log(constructor);                       // second log
+}
+
+@Logger1   // add decorator to class (always before the declaration)
+class Person1 {
+  name = 'Max';
+
+  constructor() {
+    console.log('Creating person object...');     // third log
+  }
+}
+
+const pers1 = new Person1();                      
+
+console.log(pers1);                               // fourth log
+```
+</p>
+</details>
+
+<details><summary><b>Decorator Fuctories</b></summary>
+<p>
+    
+```ts
+//----We need to return the function to pass the parameters in decorator
+
+function Logger2(logString: string) { // Take parameters
+  return function(constructor: Function) { // Decorator always must accept the class constructor
+    console.log(logString);                                  // log-1
+    console.log(constructor);                                // log-2
+  };
+}
+
+@Logger2('LOGGING - PERSON')   // Now we can pass parameters in decorator 
+class Person2 {
+  name = 'Dimon';
+
+  constructor() {
+    console.log('Creating person object...');                // log-3
+  }
+}
+
+const pers2 = new Person2();
+
+console.log(pers2);                                          // log-4
+```
+</p>
+</details>
+
+<details><summary><b>Decorator With Temlate</b></summary>
+<p>
+    
+```ts
+//-----------------Creating custom component structure-----------------
+
+function Logger3(logString: string) {
+  return function(constructor: Function) {
+    console.log(logString);
+    console.log(constructor);
+  };
+}
+
+function WithTemplate3(template: string, hookId: string) {
+  return function(constructor: any) {
+    const hookEl = document.getElementById(hookId); // find for IdBlock
+    const p = new constructor();
+    if (hookEl) {
+      hookEl.innerHTML = template;
+      hookEl.querySelector('h1')!.textContent = p.name; // Set class poperty in temlate
+    }
+  }
+}
+
+// @Logger3('LOGGING - PERSON')
+@WithTemplate3('<h1>My Person Object</h1>', 'app') // Set template in appId block with class poperty
+class Person3 {
+  name = 'Max';
+
+  constructor() {
+    console.log('Creating person object...');
+  }
+}
+
+const pers3 = new Person3();
+
+console.log(pers3);
+```
+</p>
+</details>
+
+<details><summary><b>Diferent Class Decorators</b></summary>
+<p>
+    
+```ts
+//--------------------Decorators for different entities-----------------
+
+function Logg(target: any, propertyName: string | Symbol) {  // For property
+  //console.log('Property decorator!');
+  //console.log(target, propertyName); // target === class constructor, "title"
+}
+
+function Logg2(target: any, name: string, descriptor: PropertyDescriptor):void {
+  console.log('Accessor decorator!');
+  //console.log(target); // target === class constructor
+  //console.log(name);
+  console.log(descriptor); //  descriptor
+}
+
+function Logg3( // For Method
+  target: any,  // target === class constructor
+  name: string | Symbol,
+  descriptor: PropertyDescriptor
+) {
+  console.log('Method decorator!');
+  //console.log(target);
+  //console.log(name);
+  console.log(descriptor); //   descriptor
+}
+
+function Logg4(target: any, name: string | Symbol, position: number) { // For Method Parameter
+  //console.log('Parameter decorator!');
+  //console.log(target);
+  //console.log(name);
+  //console.log(position);
+}
+
+
+class Product5 {
+  @Logg // Using before entity
+  title: string;
+  private _price: number;
+
+  @Logg2 // Using before entity
+  set price(val: number) {
+    if (val > 0) {
+      this._price = val;
+    } else {
+      throw new Error('Invalid price - should be positive!');
+    }
+  }
+
+  constructor(t: string, p: number) {
+    this.title = t;
+    this._price = p;
+  }
+
+  @Logg3 // Using before entity
+  getPriceWithTax(@Logg4 tax: number) { // Using before entity
+    return this._price * (1 + tax);
+  }
+}
+```
+</p>
+</details>
+
+<details><summary><b>Auto Bind Decorator</b></summary>
+<p>
+    
+```ts
+//------------------Binding This with the help of a decorator-------------
+
+
+function Autobind7(_: any, _2: string, descriptor: PropertyDescriptor) { 
+  const originalMethod = descriptor.value;  
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get() {
+      const boundFn = originalMethod.bind(this);
+      return boundFn;
+    }
+  };
+  return adjDescriptor;
+}
+
+class Printer7 {
+  message = 'This works!';
+
+  @Autobind7  
+  showMessage() {
+    console.log(this.message);
+  }
+}
+
+const p7 = new Printer7();
+p7.showMessage();
+
+const button7 = document.querySelector('button')!;
+button7.addEventListener('click', p7.showMessage);
+```
+</p>
+</details>
+
+<details><summary><b>Decorator Validation</b></summary>
+<p>
+    
+```ts
+//-----------------------Decorator validation---------------------------
+
+interface ValidatorConfig {
+  [property: string]: {
+    [validatableProp: string]: string[]; // ['required', 'positive']
+  };
+}
+
+const registeredValidators: ValidatorConfig = {};
+
+function Required(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ['required']
+  };
+}
+
+function PositiveNumber(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ['positive']
+  };
+}
+
+function validate(obj: any) {
+  const objValidatorConfig = registeredValidators[obj.constructor.name];
+  if (!objValidatorConfig) {
+    return true;
+  }
+  let isValid = true;
+  for (const prop in objValidatorConfig) {
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case 'required':
+          isValid = isValid && !!obj[prop];
+          break;
+        case 'positive':
+          isValid = isValid && obj[prop] > 0;
+          break;
+      }
+    }
+  }
+  return isValid;
+}
+
+class Course {
+  @Required
+  title: string;
+  @PositiveNumber
+  price: number;
+
+  constructor(t: string, p: number) {
+    this.title = t;
+    this.price = p;
+  }
+}
+
+const courseForm = document.querySelector('form')!;
+courseForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const titleEl = document.getElementById('title') as HTMLInputElement;
+  const priceEl = document.getElementById('price') as HTMLInputElement;
+
+  const title = titleEl.value;
+  const price = +priceEl.value;
+
+  const createdCourse = new Course(title, price);
+
+  if (!validate(createdCourse)) {
+    alert('Invalid input, please try again!');
+    return;
+  }
+  console.log(createdCourse);
+});
+```
+</p>
+</details>
