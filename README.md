@@ -3,7 +3,7 @@
 
 <hr/>
 
-## TypeScript Data types: :tiger:
+## :rabbit: TypeScript Data types: :tiger:
 
 <details><summary><b>Objects</b></summary>
 <p>
