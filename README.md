@@ -3,7 +3,7 @@
 
 <hr/>
 
-## TypeScript Data types:
+## TypeScript Data types: :tiger:
 
 <details><summary><b>Objects</b></summary>
 <p>
@@ -146,7 +146,7 @@ console.log(car);
 
 <hr/>
 
-## Classes & Interfaces:
+## Classes & Interfaces: :monkey_face:
 
 <details><summary><b>Basic Classes</b></summary>
 <p>
@@ -527,7 +527,7 @@ class Consultant implements Gritable, WhatAreYouLookingFor {
 
 <hr/>
 
-## Advanced Typing Concepts:
+## Advanced Typing Concepts: :turtle:
 
 <details><summary><b>Interseption Types</b></summary>
 <p>
@@ -727,7 +727,7 @@ const errorBag: ErrorContainer = {
 
 <hr/>
 
-## Generics Types:
+## Generics Types: :snail:
 
 <details><summary><b>Simple Generics Type</b></summary>
 <p>
@@ -861,7 +861,7 @@ const names2: Readonly<string[]> = ['Max', 'Anna'];
 
 <hr/>
 
-## Decorators
+## Decorators: :rat:
 
 <details><summary><b>First Class Decorator</b></summary>
 <p>
