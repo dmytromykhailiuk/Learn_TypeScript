@@ -3,4 +3,23 @@
 
 ## TypeScript Data types:
 
-#
+<details><summary><b>objects:</b></summary>
+<p>
+    
+```ts
+type Obl = {
+  name: string;
+  age: number;
+  isStudent?: boolean;
+  position: string
+}
+
+
+let obj: Obl = {
+  name: 'Ivan',
+  age: 30,
+  position: 'sinior'
+}
+```
+</p>
+</details>
