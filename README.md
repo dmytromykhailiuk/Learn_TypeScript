@@ -274,10 +274,6 @@ const rex = new Dog('Rex');
 
 
 
-
-
-
-
 //------------------Protrcted Props amd Methods------------------------------
 
 class Animal1 {
@@ -305,10 +301,6 @@ const bobic = new Dog1('bobic');
 
 const animal1 = new Animal('shark', false);
 // animal1.isCanFly(); // Dostn't work!!! Becouse it's not your own method
-
-
-
-
 
 
 
@@ -343,10 +335,6 @@ fly.name = 'Myyy'; // set value like a property
 
 
 
-
-
-
-
 //------------------Static------We dont need to create instance--------
 //------------------------------We can use class metods and properties-
 
@@ -364,11 +352,6 @@ class Animal3 {
 
 Animal3.addNewgenus('mammals', 'birds', 'fishes'); 
 //console.log(Animal3.genus); // ["mammals", "birds", "fishes"]
-
-
-
-
-
 
 
 
@@ -409,10 +392,6 @@ const newITDepartment5 = new ITDepartment5(21, []);
 
 
 
-
-
-
-
 //-------------------------Singleton------------------------------------
 
 class Singleton {
@@ -445,6 +424,301 @@ function clientCode() {
 }
 
 // clientCode(); // Singleton works, both variables contain the same instance.
+```
+</p>
+</details>
+
+<details><summary><b>Interfaces</b></summary>
+<p>
+    
+```ts
+//-----------------Interfaces-----------------------
+
+interface Card {
+  readonly id: number
+  img: string
+  title: string
+  log(str: string): void  // method interface 
+  description?: string
+}
+
+const card: Card = {
+  id: 1, // readonly pronerty, becouse iterface has
+  img: '/',
+  title: 'Some card',
+  log: (str: string) => console.log(str)
+}
+
+//card.id = 12 // id - readonly // We can't change
+
+// class CardClass implements Card{
+//   constructor(public id: number, public title: string, private img: string) {}
+
+//   log(str: string){
+//     console.log(str);
+//   }
+  
+// } // Class invalid becouse img - private
+
+
+
+
+
+//------------Interfaces with function--------------------------
+
+interface Log {
+  (name: string, surname: string):void
+}
+let logFullName: Log
+
+logFullName = (name: string, surname: string): void => {
+  console.log(name + ' ' + surname);  
+}  //  valid
+
+// class LogClass1 implements Log {
+//   log(a:string, b:string):void{     // Invalid
+//     console.log(a + ' ' + b);       // We can't use function interface for class
+//   }
+// }
+
+
+
+
+//--------------------Extending Interfaces---------------------------
+
+interface Named {
+  name: string
+}
+
+interface Aged {
+  age?: number
+}
+
+interface Gritable extends Named, Aged { 
+  // can extends from more than 1 iterfaces
+  // but only interface can
+
+  greet(phase: string):void
+}
+
+interface WhatAreYouLookingFor {
+  whatAreYouLookingFor():void
+}
+
+
+class Consultant implements Gritable, WhatAreYouLookingFor {  
+  // can implements from more than 1 iterfaces
+
+  constructor(public name: string, public age: number) {}
+
+  greet(str: string){
+    console.log('Hi! Welcome in ours shop');
+  }
+
+  whatAreYouLookingFor(){
+    console.log("What are you looking for"); 
+  }
+}
+```
+</p>
+</details>
+
+<hr/>
+
+## Advanced Typing Concepts:
+
+<details><summary><b>Interseption Types</b></summary>
+<p>
+    
+```ts
+type Admin = {
+  name: string;
+  privileges: string[];
+};
+
+type Employee = {
+  name: string;
+  startDate: Date;
+};
+
+// interface ElevatedEmployee extends Employee, Admin {}
+
+type ElevatedEmployee = Admin & Employee;
+
+const e1: ElevatedEmployee = {
+  name: 'Max',
+  privileges: ['create-server'],
+  startDate: new Date()
+};
+
+type Combinable = string | number;
+type Numeric = number | boolean;
+
+type Universal = Combinable & Numeric;
+```
+</p>
+</details>
+
+<details><summary><b>Function Overloads</b></summary>
+<p>
+    
+```ts
+function add(a: number, b: number): number;
+function add(a: string, b: string): string;
+function add(a: string, b: number): string;
+function add(a: number, b: string): string;
+function add(a: Combinable, b: Combinable) {
+  if (typeof a === 'string' || typeof b === 'string') {
+    return a.toString() + b.toString();
+  }
+  return a + b;
+}
+
+const result = add('Max', ' Schwarz');
+result.split(' ');
+```
+</p>
+</details>
+
+<details><summary><b>Optionl Chaning</b></summary>
+<p>
+    
+```ts
+const fetchedUserData1 = {
+  id: 'u1',
+  name: 'Max',
+  //job: { title: 'CEO', description: 'My own company' }
+};
+
+// console.log(fetchedUserData1?.job?.title); // undefined insted of Error
+```
+</p>
+</details>
+
+<details><summary><b>Nullish Coalescing</b></summary>
+<p>
+    
+```ts
+const userInput = undefined;
+
+const storedData = userInput ?? 'DEFAULT'; // Only for null value - ??
+
+console.log(storedData); // DEFAULT
+```
+</p>
+</details>
+
+<details><summary><b>Type Guard</b></summary>
+<p>
+    
+```ts
+type UnknownEmployee = Employee | Admin;
+
+function printEmployeeInformation(emp: UnknownEmployee) {
+  console.log('Name: ' + emp.name);
+  if ('privileges' in emp) {
+    console.log('Privileges: ' + emp.privileges);
+  }
+  if ('startDate' in emp) {
+    console.log('Start Date: ' + emp.startDate);
+  }
+}
+
+printEmployeeInformation({ name: 'Manu', startDate: new Date() });
+
+class Car5 {
+  drive() {
+    console.log('Driving...');
+  }
+}
+
+class Truck {
+  drive() {
+    console.log('Driving a truck...');
+  }
+
+  loadCargo(amount: number) {
+    console.log('Loading cargo ...' + amount);
+  }
+}
+
+type Vehicle = Car5 | Truck;
+
+const v1 = new Car5();
+const v2 = new Truck();
+
+function useVehicle(vehicle: Vehicle) {
+  vehicle.drive();
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(1000);
+  }
+}
+
+useVehicle(v1);
+useVehicle(v2);
+```
+</p>
+</details>
+
+<details><summary><b>Discriminated Union</b></summary>
+<p>
+    
+```ts
+interface Bird {
+  type: 'bird';
+  flyingSpeed: number;
+}
+
+interface Horse {
+  type: 'horse';
+  runningSpeed: number;
+}
+
+type Animal5 = Bird | Horse;
+
+function moveAnimal(animal: Animal5) {
+  let speed;
+  switch (animal.type) {
+    case 'bird':
+      speed = animal.flyingSpeed;
+      break;
+    case 'horse':
+      speed = animal.runningSpeed;
+  }
+  console.log('Moving at speed: ' + speed);
+}
+
+moveAnimal({type: 'bird', flyingSpeed: 10});
+```
+</p>
+</details>
+
+<details><summary><b>Type Casting</b></summary>
+<p>
+    
+```ts
+// const userInputElement = <HTMLInputElement>document.getElementById('user-input')!;
+const userInputElement = document.getElementById('user-input')! as HTMLInputElement;
+
+if (userInputElement) {
+  (userInputElement as HTMLInputElement).value = 'Hi there!';
+}
+```
+</p>
+</details>
+
+<details><summary><b>Index Properties</b></summary>
+<p>
+    
+```ts
+interface ErrorContainer { // { email: 'Not a valid email', username: 'Must start with a character!' }
+  [prop: string]: string;
+}
+
+const errorBag: ErrorContainer = {
+  email: 'Not a valid email!',
+  username: 'Must start with a capital character!'
+};
 ```
 </p>
 </details>
