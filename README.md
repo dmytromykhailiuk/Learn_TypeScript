@@ -3,7 +3,7 @@
 
 ## TypeScript Data types:
 
-<details><summary><b>• objects</b></summary>
+<details><summary><b>Objects</b></summary>
 <p>
     
 ```ts
